@@ -10,26 +10,117 @@ const int   MAX_NUMBER_OF_ITERATIONS = 256;
 const int   SCREEN_WIDTH  = 800;
 const int   SCREEN_HEIGHT = 600;
 
-const float MAX_SQUARE_RADIUS = 100.0f;
-const float dX = 1.0f/400.f;
-const float dY = 1.0f/300.f;
+const float MAX_SQUARE_RADIUS   =  100.0f;
+const float dX                  =  1.0f/400.f;
+const float dY                  =  1.0f/300.f;
+const float X_SHIFT             = -0.75f;
+const float Y_SHIFT             =  0.0f;
+const float ZOOM                =  1.0f;
 
 const unsigned BLACK = 0xFF000000;
 
-struct picture
+struct Picture
 {
-    sf::Texture texture; 
-    sf::Sprite  sprite;
-    float x_shift = 0;
-    float y_shift = 0;
-    float zoom    = 1;
+    sf::Texture     texture; 
+    sf::Sprite      sprite;
+    float           x_shift     =  0.0f;
+    float           y_shift     =  0.0f;
+    float           zoom        =  0.0f;
+    unsigned int*   pixel_array =  nullptr;
 };
 
 /*============================================*/
 
 /*============FUNCTION_DECLARATION============*/
 
-void CountMandelBrotSet(unsigned* const pixel_array, const float center_x, const float center_y, const float zoom);
+Picture*    PictureCtor(const float x_shift, const float y_shift, const float zoom);
+void        PictureDtor(Picture* const picture);
+
+void        DrawWindow (Picture* const picture);
+void        DrawWindow2(Picture &picture);
+
+void CountMandelbrotSet(unsigned* const pixel_array, const float center_x, const float center_y, const float zoom);
+
+void SetPixel(unsigned int* const pixel_array, const int x_pos, const int y_pos, const int iter_quantity);
+
+/*============================================*/
+
+int main()
+{
+    Picture* mandelbrot_picture = PictureCtor(X_SHIFT, Y_SHIFT, ZOOM);
+
+    DrawWindow(mandelbrot_picture);
+
+    PictureDtor(mandelbrot_picture);
+
+    return 0;
+}
+
+/*===========================================================*/
+
+Picture* PictureCtor(const float x_shift, const float y_shift, const float zoom)
+{
+    Picture* picture = new Picture;
+
+    picture->x_shift = x_shift;
+    picture->y_shift = y_shift;
+    picture->zoom    = zoom;
+
+    if (!picture->texture.create(SCREEN_WIDTH, SCREEN_HEIGHT))
+    {
+        assert(0 && "Not create!\n");
+    }
+    
+    picture->sprite.setTexture(picture->texture);
+
+    picture->pixel_array = (unsigned int*) calloc(SCREEN_HEIGHT * SCREEN_WIDTH, sizeof(unsigned int));
+    assert((picture->pixel_array != nullptr) && "Program can not allocate memory!\n");
+
+    return picture;
+}   
+
+void PictureDtor(Picture* const picture)
+{
+    assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
+    assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
+
+    picture->x_shift = 0.0f;
+    picture->y_shift = 0.0f;
+    picture->zoom    = 0.0f;
+
+    free(picture->pixel_array);
+    picture->pixel_array = nullptr;
+
+    free(picture);
+
+    return;
+}
+
+void DrawWindow(Picture* const picture)
+{
+    assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
+    assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
+
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Mandelbrot_set", sf::Style::Default);
+
+    while(window.isOpen())
+    {
+        //time_start
+        CountMandelbrotSet(picture->pixel_array, picture->x_shift, picture->y_shift, picture->zoom);
+        //time_end
+
+        ((*picture).texture).update((const uint8_t *) (picture->pixel_array));
+
+        window.clear();
+
+        window.draw(picture->sprite);
+
+        window.display();
+    }
+
+}
+
+/*===========================================================*/
 
 void SetPixel(unsigned int* const pixel_array, const int x_pos, const int y_pos, const int iter_quantity)
 {
@@ -49,41 +140,7 @@ void SetPixel(unsigned int* const pixel_array, const int x_pos, const int y_pos,
     }
 }
 
-/*============================================*/
-
-int main()
-{
-    float center_x = -0.75f;
-    float center_y =  0.0f;
-    float zoom     =  1.0f;
-
-    unsigned int* pixel_array = (unsigned int*) calloc(SCREEN_HEIGHT * SCREEN_WIDTH, sizeof(int));
-
-    picture mandelbrot_set = {};
-    mandelbrot_set.texture.create(SCREEN_WIDTH, SCREEN_HEIGHT);
-    mandelbrot_set.sprite.setTexture(mandelbrot_set.texture);
-
-    CountMandelBrotSet(pixel_array, center_x, center_y, zoom);
-
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Mandelbrot_set", sf::Style::Default);
-
-    while(window.isOpen())
-    {
-        mandelbrot_set.texture.update((const uint8_t *) pixel_array);
-
-        window.clear();
-
-        window.draw(mandelbrot_set.sprite);
-
-        window.display();
-    }
-
-    free(pixel_array);
-
-    return 0;
-}
-
-void CountMandelBrotSet(unsigned int* const pixel_array, const float center_x, const float center_y, const float zoom)
+void CountMandelbrotSet(unsigned int* const pixel_array, const float center_x, const float center_y, const float zoom)
 {
     assert((pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
 
