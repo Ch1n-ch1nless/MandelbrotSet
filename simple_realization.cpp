@@ -19,6 +19,12 @@ const float ZOOM                =  1.0f;
 
 const unsigned BLACK = 0xFF000000;
 
+enum UserCommands : int
+{
+    NO_COMMANDS     = 0,
+    CLOSE_WINDOW    = 1,
+};
+
 struct Picture
 {
     sf::Texture     texture; 
@@ -33,15 +39,15 @@ struct Picture
 
 /*============FUNCTION_DECLARATION============*/
 
-Picture*    PictureCtor(const float x_shift, const float y_shift, const float zoom);
-void        PictureDtor(Picture* const picture);
+Picture*    PictureCtor(float x_shift, float y_shift, float zoom);
+void        PictureDtor(Picture* picture);
 
-void        DrawWindow (Picture* const picture);
-void        DrawWindow2(Picture &picture);
+void        DrawWindow (Picture* picture);
 
-void CountMandelbrotSet(unsigned* const pixel_array, const float center_x, const float center_y, const float zoom);
+int         UpdateUserSettings(Picture* picture);
 
-void SetPixel(unsigned int* const pixel_array, const int x_pos, const int y_pos, const int iter_quantity);
+void        CountMandelbrotSet(unsigned* pixel_array, float center_x, float center_y, float zoom);
+void        SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity);
 
 /*============================================*/
 
@@ -58,7 +64,7 @@ int main()
 
 /*===========================================================*/
 
-Picture* PictureCtor(const float x_shift, const float y_shift, const float zoom)
+Picture* PictureCtor(float x_shift, float y_shift, float zoom)
 {
     Picture* picture = new Picture;
 
@@ -79,7 +85,7 @@ Picture* PictureCtor(const float x_shift, const float y_shift, const float zoom)
     return picture;
 }   
 
-void PictureDtor(Picture* const picture)
+void PictureDtor(Picture* picture)
 {
     assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
     assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
@@ -96,7 +102,7 @@ void PictureDtor(Picture* const picture)
     return;
 }
 
-void DrawWindow(Picture* const picture)
+void DrawWindow(Picture* picture)
 {
     assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
     assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
@@ -105,11 +111,15 @@ void DrawWindow(Picture* const picture)
 
     while(window.isOpen())
     {
+        sf::Event event;
+        
+        if (UpdateUserSettings(picture) == CLOSE_WINDOW) break;
+
         //time_start
         CountMandelbrotSet(picture->pixel_array, picture->x_shift, picture->y_shift, picture->zoom);
         //time_end
 
-        ((*picture).texture).update((const uint8_t *) (picture->pixel_array));
+        picture->texture.update((const uint8_t *) (picture->pixel_array));
 
         window.clear();
 
@@ -120,9 +130,47 @@ void DrawWindow(Picture* const picture)
 
 }
 
+int UpdateUserSettings(Picture* picture)
+{
+    assert((picture != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
+
+    sf::Keyboard keyboard;
+
+    if (keyboard.isKeyPressed(sf::Keyboard::Add))
+    {
+        picture->zoom /= 1.1f;
+    }
+    if (keyboard.isKeyPressed(sf::Keyboard::Subtract))
+    {
+        picture->zoom *= 1.1f;
+    }
+    if (keyboard.isKeyPressed(sf::Keyboard::Up))
+    {
+        picture->y_shift -= 0.1f;
+    }
+    if (keyboard.isKeyPressed(sf::Keyboard::Down))
+    {
+        picture->y_shift += 0.1f;
+    }
+    if (keyboard.isKeyPressed(sf::Keyboard::Left))
+    {
+        picture->x_shift -= 0.1f;
+    }
+    if (keyboard.isKeyPressed(sf::Keyboard::Right))
+    {
+        picture->x_shift += 0.1f;
+    }
+    if (keyboard.isKeyPressed(sf::Keyboard::Escape))
+    {
+        return CLOSE_WINDOW;
+    }
+
+    return NO_COMMANDS;
+}
+
 /*===========================================================*/
 
-void SetPixel(unsigned int* const pixel_array, const int x_pos, const int y_pos, const int iter_quantity)
+void SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity)
 {
     assert((pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
 
@@ -140,7 +188,7 @@ void SetPixel(unsigned int* const pixel_array, const int x_pos, const int y_pos,
     }
 }
 
-void CountMandelbrotSet(unsigned int* const pixel_array, const float center_x, const float center_y, const float zoom)
+void CountMandelbrotSet(unsigned int* pixel_array, float center_x, float center_y, float zoom)
 {
     assert((pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
 
