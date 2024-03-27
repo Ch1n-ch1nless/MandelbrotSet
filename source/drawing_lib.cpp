@@ -49,11 +49,17 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
     {
         sf::Event event;
         
-        if (UpdateUserSettings(picture) == CLOSE_WINDOW) break;
+        if (UpdateUserSettings(picture) == CLOSE_WINDOW) 
+        {
+            window.close();
+            return;
+        }
 
-        //time_start
+        unsigned long long time_start = __rdtsc();
         CalculateMandelbrotSet(picture);
-        //time_end
+        unsigned long long time_end   = __rdtsc();
+        printf("%lld\n", time_end - time_start);
+
 
         picture->texture.update((const uint8_t *) (picture->pixel_array));
 
@@ -74,27 +80,27 @@ int UpdateUserSettings(Picture* picture)
 
     if (keyboard.isKeyPressed(sf::Keyboard::Add))
     {
-        picture->zoom /= 1.1f;
+        picture->zoom /= ZOOM_CONSTANT;
     }
     if (keyboard.isKeyPressed(sf::Keyboard::Subtract))
     {
-        picture->zoom *= 1.1f;
+        picture->zoom *= ZOOM_CONSTANT;
     }
     if (keyboard.isKeyPressed(sf::Keyboard::Up))
     {
-        picture->y_shift -= 0.1f;
+        picture->y_shift -= SHIFT_CONSTANT * picture->zoom;
     }
     if (keyboard.isKeyPressed(sf::Keyboard::Down))
     {
-        picture->y_shift += 0.1f;
+        picture->y_shift += SHIFT_CONSTANT * picture->zoom;
     }
     if (keyboard.isKeyPressed(sf::Keyboard::Left))
     {
-        picture->x_shift -= 0.1f;
+        picture->x_shift -= SHIFT_CONSTANT * picture->zoom;
     }
     if (keyboard.isKeyPressed(sf::Keyboard::Right))
     {
-        picture->x_shift += 0.1f;
+        picture->x_shift += SHIFT_CONSTANT * picture->zoom;
     }
     if (keyboard.isKeyPressed(sf::Keyboard::Escape))
     {

@@ -2,6 +2,7 @@
 #define DRAWING_LIBRARY
 
 #include <assert.h>
+#include <immintrin.h>
 #include <math.h>
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
@@ -18,7 +19,10 @@ const float dX                  =  1.0f/400.f;
 const float dY                  =  1.0f/300.f;
 const float X_SHIFT             = -0.75f;
 const float Y_SHIFT             =  0.0f;
-const float ZOOM                =  1.0f;
+const float ZOOM_DEFAULT        =  1.0f;
+
+const float SHIFT_CONSTANT      = 0.1f;
+const float ZOOM_CONSTANT       = 1.1f;
 
 const unsigned BLACK = 0xFF000000;
 
