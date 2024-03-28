@@ -6,7 +6,7 @@ CFLAGS=-Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal
 	   -Wformat=2 -Wignored-qualifiers -Wlogical-op -Wno-missing-field-initializers -Wnon-virtual-dtor\
 	   -Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing\
 	   -Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla\
-	   -D_DEBUG -mavx2
+	   -D_DEBUG
 
 SRC_DIR = ./source/
 OBJ_DIR = ./object/
@@ -20,7 +20,7 @@ link: $(OBJ)
 	$(CC) $(OBJ) -o mandelbrot_set -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system 
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
-	$(CC) $(CFALGS) -O3 -c $< -o $@
+	$(CC) $(CFLAGS) -mavx2 -mfma -mavx -msse4.2 -O3 -c $< -o $@
 
 clean:
 	rm $(OBJ)

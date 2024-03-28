@@ -49,10 +49,43 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
     {
         sf::Event event;
         
-        if (UpdateUserSettings(picture) == CLOSE_WINDOW) 
+        while (window.pollEvent(event))
         {
-            window.close();
-            return;
+            sf::Keyboard keyboard;
+
+            if (keyboard.isKeyPressed(sf::Keyboard::Add))
+            {
+                picture->zoom /= ZOOM_CONSTANT;
+            }
+            if (keyboard.isKeyPressed(sf::Keyboard::Subtract))
+            {
+                picture->zoom *= ZOOM_CONSTANT;
+            }
+            if (keyboard.isKeyPressed(sf::Keyboard::Up))
+            {
+                picture->y_shift -= SHIFT_CONSTANT * picture->zoom;
+            }
+            if (keyboard.isKeyPressed(sf::Keyboard::Down))
+            {
+                picture->y_shift += SHIFT_CONSTANT * picture->zoom;
+            }
+            if (keyboard.isKeyPressed(sf::Keyboard::Left))
+            {
+                picture->x_shift -= SHIFT_CONSTANT * picture->zoom;
+            }
+            if (keyboard.isKeyPressed(sf::Keyboard::Right))
+            {
+                picture->x_shift += SHIFT_CONSTANT * picture->zoom;
+            }
+            if (keyboard.isKeyPressed(sf::Keyboard::Escape))
+            {
+                window.close();
+            }
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                break;
+            }
         }
 
         unsigned long long time_start = __rdtsc();
@@ -70,44 +103,6 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
         window.display();
     }
 
-}
-
-int UpdateUserSettings(Picture* picture)
-{
-    assert((picture != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
-
-    sf::Keyboard keyboard;
-
-    if (keyboard.isKeyPressed(sf::Keyboard::Add))
-    {
-        picture->zoom /= ZOOM_CONSTANT;
-    }
-    if (keyboard.isKeyPressed(sf::Keyboard::Subtract))
-    {
-        picture->zoom *= ZOOM_CONSTANT;
-    }
-    if (keyboard.isKeyPressed(sf::Keyboard::Up))
-    {
-        picture->y_shift -= SHIFT_CONSTANT * picture->zoom;
-    }
-    if (keyboard.isKeyPressed(sf::Keyboard::Down))
-    {
-        picture->y_shift += SHIFT_CONSTANT * picture->zoom;
-    }
-    if (keyboard.isKeyPressed(sf::Keyboard::Left))
-    {
-        picture->x_shift -= SHIFT_CONSTANT * picture->zoom;
-    }
-    if (keyboard.isKeyPressed(sf::Keyboard::Right))
-    {
-        picture->x_shift += SHIFT_CONSTANT * picture->zoom;
-    }
-    if (keyboard.isKeyPressed(sf::Keyboard::Escape))
-    {
-        return CLOSE_WINDOW;
-    }
-
-    return NO_COMMANDS;
 }
 
 void SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity)
