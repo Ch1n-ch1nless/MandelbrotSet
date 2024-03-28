@@ -14,7 +14,7 @@ int main()
 {
     Picture* mandelbrot_picture = PictureCtor(X_SHIFT, Y_SHIFT, ZOOM_DEFAULT);
 
-    DrawWindow(mandelbrot_picture, CalculateMandelbrotSet_With_SIMD);
+    DrawWindow(mandelbrot_picture, CalculateMandelbrotSet_With_Fake_SIMD);
 
     PictureDtor(mandelbrot_picture);
 
@@ -73,7 +73,7 @@ void CalculateMandelbrotSet_With_Fake_SIMD(Picture* picture)
             float zoom_dx = dX * picture->zoom;
 
             float x0_array[8]    = {x0, x0 + zoom_dx, x0 + 2*zoom_dx, x0 + 3*zoom_dx, x0 + 4*zoom_dx, x0 + 5*zoom_dx, x0 + 6*zoom_dx, x0 + 7*zoom_dx};
-            float y0_array[8]    = {y0, y0,           y0,             y0,             y0,             y0,             y0,             y0       };
+            float y0_array[8]    = {y0, y0,           y0,             y0,             y0,             y0,             y0,             y0            };
 
             float cur_x_array[8] = {}; for (int i = 0; i < 8; i++) cur_x_array[i] = x0_array[i];
             float cur_y_array[8] = {}; for (int i = 0; i < 8; i++) cur_y_array[i] = y0_array[i];

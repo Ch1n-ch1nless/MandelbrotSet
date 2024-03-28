@@ -45,6 +45,8 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
 
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Mandelbrot_set", sf::Style::Default);
 
+    FPS* fps = FPSCtor();
+
     while(window.isOpen())
     {
         sf::Event event;
@@ -91,7 +93,7 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
         unsigned long long time_start = __rdtsc();
         CalculateMandelbrotSet(picture);
         unsigned long long time_end   = __rdtsc();
-        printf("%lld\n", time_end - time_start);
+        //printf("%lld\n", time_end - time_start);
 
 
         picture->texture.update((const uint8_t *) (picture->pixel_array));
@@ -100,8 +102,12 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
 
         window.draw(picture->sprite);
 
+        WriteFPS(fps, window);
+
         window.display();
     }
+
+    FPSDtor(fps);
 
 }
 
@@ -121,4 +127,43 @@ void SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity
         *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 2) = coef;
         *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 3) = 0xFF;
     }
+}
+
+FPS* FPSCtor(void)
+{
+    FPS* new_fps_struct = new FPS;
+
+    sf::Text text("", new_fps_struct->font, 20);
+    new_fps_struct->text = text;
+    
+    new_fps_struct->text.setColor(sf::Color::Green);
+    new_fps_struct->text.setPosition(10, 10);
+
+    if (!new_fps_struct->font.loadFromFile("arial.ttf"))
+    {
+        assert(0 && "Program can not find the file \'arial.ttf\'\n");
+    }
+
+    return new_fps_struct;
+}
+
+void FPSDtor(FPS* program_fps)
+{
+    assert((program_fps != nullptr) && "Pointer to \'program_fps\' is NULL!!!\n");
+
+    free(program_fps);
+    return;
+}
+
+void WriteFPS(FPS* program_fps, sf::RenderWindow &window)
+{
+    assert((program_fps != nullptr) && "Pointer to \'program_fps\' is NULL!!!\n");
+
+    float delta_time = program_fps->clock.restart().asSeconds();
+    float fps = 1 / delta_time;
+
+    std::string _string = "FPS: " + std::to_string(fps);
+    program_fps->text.setString(_string);
+
+    window.draw(program_fps->text);
 }
