@@ -14,7 +14,7 @@ int main()
 {
     Picture* mandelbrot_picture = PictureCtor(X_SHIFT, Y_SHIFT, ZOOM_DEFAULT);
 
-    DrawWindow(mandelbrot_picture, CalculateMandelbrotSet_With_Fake_SIMD);
+    DrawWindow(mandelbrot_picture, CalculateMandelbrotSet_With_SIMD);
 
     PictureDtor(mandelbrot_picture);
 

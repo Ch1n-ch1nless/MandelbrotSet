@@ -90,10 +90,14 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
             }
         }
 
+        #ifdef SHOW_TIME
         unsigned long long time_start = __rdtsc();
         CalculateMandelbrotSet(picture);
         unsigned long long time_end   = __rdtsc();
-        //printf("%lld\n", time_end - time_start);
+        printf("%lld\n", time_end - time_start);
+        #else
+        CalculateMandelbrotSet(picture);
+        #endif
 
 
         picture->texture.update((const uint8_t *) (picture->pixel_array));
@@ -164,6 +168,10 @@ void WriteFPS(FPS* program_fps, sf::RenderWindow &window)
 
     std::string _string = "FPS: " + std::to_string(fps);
     program_fps->text.setString(_string);
+
+    #ifdef SHOW_FPS
+    printf("%f\n", fps);
+    #endif
 
     window.draw(program_fps->text);
 }
