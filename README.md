@@ -40,7 +40,48 @@
 
 ### 1 версия
 Файл: "simple_realization.cpp". <br>
-Алгоритм для каждого пикселя рассчитывает его координаты в системе координат, которую указал пользователь. Затем производятся вычисления, указанные в ["Расчет множества Мандельброта"](Расчет множества Мандельброта). 
+Алгоритм для каждого пикселя рассчитывает его координаты в системе координат, которую указал пользователь. Затем производятся вычисления, указанные в расчете. И красится пиксель.
+
+Код расчета алгоритма:
+``` C
+//SCREEN_WIDTH  - ширина экрана
+//SCREEN_HEIGHT - высота экрана
+
+void PerPixelCalculateMandelbrotSet(Picture* picture)
+{
+    assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
+    assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
+
+    for (int iy = 0; iy < SCREEN_HEIGHT; iy++)
+    {
+        for (int ix = 0; ix < SCREEN_WIDTH; ix++)
+        {
+            float x0 = picture->x_shift + (((float)ix - SCREEN_WIDTH  / 2) * dX) * picture->zoom;
+            float y0 = picture->y_shift + (((float)iy - SCREEN_HEIGHT / 2) * dY) * picture->zoom * HEIGHT_WIDTH_RELATION;
+
+            float x = x0;
+            float y = y0;
+
+            int number_of_iterations = 0;
+
+            for ( ; number_of_iterations < MAX_NUMBER_OF_ITERATIONS; number_of_iterations++)
+            {
+                float x2 = x * x;
+                float y2 = y * y;
+                float xy = x * y;
+
+                float r2 = x2 + y2;
+                if (r2 > MAX_SQUARE_RADIUS) break;
+
+                x = x2 - y2 + x0;
+                y = xy + xy + y0;
+            }
+
+            SetPixel(picture->pixel_array, ix, iy, number_of_iterations);
+        }
+    }
+}
+```
 
 | Флаг компиляции |  FPS |   Такты    | 
 |:---------------:|:----:|:----------:|
