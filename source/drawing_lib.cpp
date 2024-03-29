@@ -125,7 +125,7 @@ void SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity
     }
     else
     {
-        unsigned char coef = (unsigned char)(sqrtf(sqrtf((float)iter_quantity / (float)MAX_NUMBER_OF_ITERATIONS)) * 255.f);
+        unsigned char coef = (unsigned char)(pow(((float)iter_quantity / (float)MAX_NUMBER_OF_ITERATIONS), 0.35f) * 255.f);
 
         *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 0) = 255 - coef;
         *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 1) = 64 * (coef % 2);
