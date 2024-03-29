@@ -15,40 +15,22 @@ OBJ_DIR = ./object/
 SRC = $(wildcard $(SRC_DIR)*.cpp)
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
 
-all: hello
+all: 
 
-hello: 
-	echo $(NAME)
+intrinsic:
+	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/intrinsic_realization.cpp -o ./object/intrinsic_realization.o
+	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
+	$(CC) ./object/drawing_lib.o ./object/intrinsic_realization.o -o mandelbrot_intrinsic -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
-with_simd_O3:
-	$(CC) $(CFLAGS) -O3 -c ./source/simd_realization.cpp -o ./object/simd_realization.o
-	$(CC) $(CFLAGS) -O3 -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/simd_realization.o -o mandelbrot_with_simd_O3 -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+vector:
+	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/vector_realization.cpp -o ./object/vector_realization.o
+	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
+	$(CC) ./object/drawing_lib.o ./object/vector_realization.o -o mandelbrot_vector -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
-with_simd_O0:
-	$(CC) $(CFLAGS) -O0 -c ./source/simd_realization.cpp -o ./object/simd_realization.o
-	$(CC) $(CFLAGS) -O0 -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/simd_realization.o -o mandelbrot_with_simd_O0 -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-
-with_fake_simd_O3:
-	$(CC) $(CFLAGS) -O3 -c ./source/8_point_realization.cpp -o ./object/8_point_realization.o
-	$(CC) $(CFLAGS) -O3 -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/8_point_realization.o -o mandelbrot_with_fake_simd_O3 -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-
-with_fake_simd_O0:
-	$(CC) $(CFLAGS) -O0 -c ./source/8_point_realization.cpp -o ./object/8_point_realization.o
-	$(CC) $(CFLAGS) -O0 -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/8_point_realization.o -o mandelbrot_with_fake_simd_O0 -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-
-without_simd_O3:
-	$(CC) $(CFLAGS) -O3 -c ./source/simple_realization.cpp -o ./object/simple_realization.o
-	$(CC) $(CFLAGS) -O3 -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/simple_realization.o -o mandelbrot_without_simd_O3 -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-
-without_simd_O0:
-	$(CC) $(CFLAGS) -O0 -c ./source/simple_realization.cpp -o ./object/simple_realization.o
-	$(CC) $(CFLAGS) -O0 -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/simple_realization.o -o mandelbrot_without_simd_O0 -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+simple:
+	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/simple_realization.cpp -o ./object/simple_realization.o
+	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
+	$(CC) ./object/drawing_lib.o ./object/simple_realization.o -o mandelbrot_simple -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 clean:
 	rm $(OBJ)

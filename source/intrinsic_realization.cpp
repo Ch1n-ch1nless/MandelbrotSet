@@ -2,7 +2,7 @@
 
 /*============FUNCTION_DECLARATION============*/
 
-void CalculateMandelbrotSet_With_SIMD(Picture* picture);
+void IntrinsicCalculateMandelbrotSet(Picture* picture);
 
 /*============================================*/
 
@@ -10,14 +10,14 @@ int main()
 {
     Picture* mandelbrot_picture = PictureCtor(X_SHIFT, Y_SHIFT, ZOOM_DEFAULT);
 
-    DrawWindow(mandelbrot_picture, CalculateMandelbrotSet_With_SIMD);
+    DrawWindow(mandelbrot_picture, IntrinsicCalculateMandelbrotSet);
 
     PictureDtor(mandelbrot_picture);
 
     return 0;
 }
 
-void CalculateMandelbrotSet_With_SIMD(Picture* picture)
+void IntrinsicCalculateMandelbrotSet(Picture* picture)
 {
     assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
     assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
@@ -31,8 +31,8 @@ void CalculateMandelbrotSet_With_SIMD(Picture* picture)
     {
         for (int ix = 0; ix < SCREEN_WIDTH; ix += 8)
         {
-            float x0 = (((float)ix - SCREEN_WIDTH  / 2) * dX + picture->x_shift) * picture->zoom;
-            float y0 = (((float)iy - SCREEN_HEIGHT / 2) * dY + picture->y_shift) * picture->zoom;
+            float x0 = picture->x_shift + (((float)ix - SCREEN_WIDTH  / 2) * dX) * picture->zoom;
+            float y0 = picture->y_shift + (((float)iy - SCREEN_HEIGHT / 2) * dY) * picture->zoom * HEIGHT_WIDTH_RELATION;
 
             __m256 x0_coords = _mm256_add_ps(_mm256_mul_ps(delta_x, _76543210), _mm256_set1_ps(x0));
             __m256 y0_coords = _mm256_set1_ps(y0);

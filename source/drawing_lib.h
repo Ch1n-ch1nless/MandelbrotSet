@@ -14,12 +14,13 @@ const int   MAX_NUMBER_OF_ITERATIONS = 256;
 const int   SCREEN_WIDTH  = 800;
 const int   SCREEN_HEIGHT = 600;
 
-const float MAX_SQUARE_RADIUS   =  100.0f;
-const float dX                  =  1.0f/400.f;
-const float dY                  =  1.0f/300.f;
-const float X_SHIFT             = -0.75f;
-const float Y_SHIFT             =  0.0f;
-const float ZOOM_DEFAULT        =  1.0f;
+const float MAX_SQUARE_RADIUS       =  100.0f;
+const float dX                      =  1.0f/400.f;
+const float dY                      =  1.0f/300.f;
+const float X_SHIFT                 = -0.75f;
+const float Y_SHIFT                 =  0.0f;
+const float ZOOM_DEFAULT            =  1.0f;
+const float HEIGHT_WIDTH_RELATION   =  ((float)SCREEN_HEIGHT) / ((float)SCREEN_WIDTH);
 
 const float SHIFT_CONSTANT      = 0.1f;
 const float ZOOM_CONSTANT       = 1.1f;
