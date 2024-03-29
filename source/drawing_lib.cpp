@@ -33,7 +33,7 @@ void PictureDtor(Picture* picture)
     free(picture->pixel_array);
     picture->pixel_array = nullptr;
 
-    free(picture);
+    delete picture;
 
     return;
 }
@@ -90,14 +90,14 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
             }
         }
 
-        #ifdef SHOW_TIME
+#ifdef SHOW_TIME
         unsigned long long time_start = __rdtsc();
         CalculateMandelbrotSet(picture);
         unsigned long long time_end   = __rdtsc();
         printf("%lld\n", time_end - time_start);
-        #else
+#else
         CalculateMandelbrotSet(picture);
-        #endif
+#endif
 
 
         picture->texture.update((const uint8_t *) (picture->pixel_array));
@@ -126,6 +126,7 @@ void SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity
     else
     {
         unsigned char coef = (unsigned char)(sqrtf(sqrtf((float)iter_quantity / (float)MAX_NUMBER_OF_ITERATIONS)) * 255.f);
+
         *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 0) = 255 - coef;
         *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 1) = 64 * (coef % 2);
         *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 2) = coef;
@@ -166,8 +167,8 @@ void WriteFPS(FPS* program_fps, sf::RenderWindow &window)
     float delta_time = program_fps->clock.restart().asSeconds();
     float fps = 1 / delta_time;
 
-    std::string _string = "FPS: " + std::to_string(fps);
-    program_fps->text.setString(_string);
+    std::string fps_string = "FPS: " + std::to_string(fps);
+    program_fps->text.setString(fps_string);
 
     #ifdef SHOW_FPS
     printf("%f\n", fps);

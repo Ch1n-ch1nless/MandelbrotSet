@@ -6,7 +6,8 @@ CFLAGS=-Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal
 	   -Wformat=2 -Wignored-qualifiers -Wlogical-op -Wno-missing-field-initializers -Wnon-virtual-dtor\
 	   -Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing\
 	   -Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla\
-	   -D_DEBUG -DSHOW_TIME -mavx2 -mfma -mavx -msse4.2
+	   -D_DEBUG -mavx2 -mfma -mavx -msse4.2
+
 
 SRC_DIR = ./source/
 OBJ_DIR = ./object/
@@ -14,7 +15,10 @@ OBJ_DIR = ./object/
 SRC = $(wildcard $(SRC_DIR)*.cpp)
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
 
-all: with_simd_O3
+all: hello
+
+hello: 
+	echo $(NAME)
 
 with_simd_O3:
 	$(CC) $(CFLAGS) -O3 -c ./source/simd_realization.cpp -o ./object/simd_realization.o
