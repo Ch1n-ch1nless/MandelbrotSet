@@ -1,24 +1,27 @@
-<h1 align="center"> Лабораторная работа </h1>
-<h1 align="center"> "Исследование зависимости времени работы программы от использования флагов компиляции, машинно зависимых оптимизаций и векторизации вычислений" </h1>
+# Лабораторная работа
+# Тема: "Оптимизация алгоритма расчета множества Мандельброта с помощью [SIMD]()" 
 <br>
 
-<h3 align="center"> Александров Олег </h3>
-<h3 align="center"> Б05-331 </h3>
-<h3 align="center"> 28.03.2024 </h3>
+### Александров Олег
+### Б05-331 
+### 29.03.2024 
 
 <br>
 
-<h1 align="center"> Цель работы </h1>
-Выяснить насколько сильно уменьшается время работы программы от использования флагов компиляции, машинно зависимых оптимизаций и векторизации вычислений.
-<h1 align="center"> Оборудование </h1>
-<b>Процессор</b> : AMD Ryzen 7 5800H, поддерживающий инструкции: AVX(1, 2)<br>
-<b>ОС</b> : Linux Ubuntu 22.04.4 LTS (64-bit). Все тесты были проведены в режиме "Perfomance". <br>
+# Цель работы 
+1) Оптимизировать алгоритм расчета множества Мандельброта с помощью SIMD инструкций. \
+2) Исследовать зависимость времени работы алгоритма от оптимизаций компилятора и SIMD инструкций 
+# Оборудование 
+<b>Компилятор</b>: g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0 \
+<b>Уровни оптимизаций</b>: O0, O3 \
+[Список всех флагов](#полный-список-всех-флагов) \
+<b>Процессор</b> : AMD Ryzen 7 5800H, поддерживающий инструкции: AVX(1, 2) \
+<b>ОС</b> : Linux Ubuntu 22.04.4 LTS (64-bit). Все тесты были проведены в режиме "Perfomance".\
 
-<h1 align="center"> Ход работы </h1>
+# Ход работы 
 
-## Выбор программы
-
-Я решил написать программу, которая рисует [множество Мандельброта](https://ru.wikipedia.org/wiki/%D0%9C%D0%BD%D0%BE%D0%B6%D0%B5%D1%81%D1%82%D0%B2%D0%BE_%D0%9C%D0%B0%D0%BD%D0%B4%D0%B5%D0%BB%D1%8C%D0%B1%D1%80%D0%BE%D1%82%D0%B0). Данная программа подходит по критериям, так как она может быть векторизована и можно внедрить машинно зависимые оптимизации.
+## Немного теоретической справки
+м
 
 ## Зависимости
 
@@ -136,5 +139,19 @@ _mm256_cmp_ps();
 при компилировании с флагом -O3 время работы программы уменьшается в ~3 раза. <br>
 При внедрении "векторизации" с флагом -O3 время работы программы уменьшается в ~6 раз. <br>
 При использовании intrinsic функций с флагом O3 время работы уменьшается в ~21 раз <br>
+
+<h1 align="center"> Приложение </h1>
+
+<h4>Полный список флагов</h4>
+```
+-Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal\
+-Winline -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs \
+-Wswitch-enum -Wswitch-default -Weffc++ -Wmain -Wextra -Wall -g -pipe -fexceptions\
+-Wcast-qual -Wconversion -Wctor-dtor-privacy -Wempty-body -Wformat-security\
+-Wformat=2 -Wignored-qualifiers -Wlogical-op -Wno-missing-field-initializers -Wnon-virtual-dtor\
+-Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing\
+-Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla\
+-D_DEBUG -mavx2 -mfma -mavx -msse4.2
+```
 
 
