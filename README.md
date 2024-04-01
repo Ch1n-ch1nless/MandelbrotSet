@@ -37,30 +37,29 @@
 Вычисления будут производится, пока $x_n^2 + y_n^2 < 100$ и $n \leq 256$. Исходя из n (n - номер итерации на которой закончились вычисления) выбирается цвет для точки $(x_0, y_0)$. Так же стоит заметить, что выбор цвета для 1 точки НЕ ЗАВИСИТ от других точек. Этот факт будет использован в 2 и 3 версии программы.
 
 ## Измерение времени 
-Всего было реализовано 3 версии программы. Время я измерял время через функцию [__rdtsc()](https://github.com/MicrosoftDocs/cpp-docs/blob/main/docs/intrinsics/rdtsc.md), которая возвращает количество тактов с последнего сброса процессора(CPU reset). Рассчитывается разность и суммируется, после вычисляется среднее арифметическое<br>
-Так же измерение времени было произведено с [clock](https://www.sfml-dev.org/documentation/2.6.1/classsf_1_1Clock.php). <br>
-Всего было произведено 5 запусков каждой версии и в таблицах находится их среднее арифметическое.
 
 ### 1 версия
-Файл: "simple_realization.cpp". <br>
+
 Алгоритм для каждого пикселя рассчитывает его координаты в системе координат, которую указал пользователь. Затем производятся вычисления, указанные в расчете. И красится пиксель.
 
 Код расчета алгоритма:
 ``` C
-//SCREEN_WIDTH  - ширина экрана
-//SCREEN_HEIGHT - высота экрана
+//SCREEN_WIDTH          - ширина экрана
+//SCREEN_HEIGHT         - высота экрана
+//HEIGHT_WIDTH_RELATION - соотношение между высотой и шириной экрана
+//dx                    - шаг по оси X
+//dY                    - шаг по оси Y
 
-void PerPixelCalculateMandelbrotSet(Picture* picture)
+void PerPixelCalculateMandelbrotSet(unsigned int* pixel_array, int x_shift, int y_shift, int zoom)
 {
-    assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
-    assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
+    assert((pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
 
     for (int iy = 0; iy < SCREEN_HEIGHT; iy++)
     {
         for (int ix = 0; ix < SCREEN_WIDTH; ix++)
         {
-            float x0 = picture->x_shift + (((float)ix - SCREEN_WIDTH  / 2) * dX) * picture->zoom;
-            float y0 = picture->y_shift + (((float)iy - SCREEN_HEIGHT / 2) * dY) * picture->zoom * HEIGHT_WIDTH_RELATION;
+            float x0 = x_shift + (((float)ix - SCREEN_WIDTH  / 2) * dX) * zoom;
+            float y0 = y_shift + (((float)iy - SCREEN_HEIGHT / 2) * dY) * zoom * HEIGHT_WIDTH_RELATION;
 
             float x = x0;
             float y = y0;
@@ -80,7 +79,7 @@ void PerPixelCalculateMandelbrotSet(Picture* picture)
                 y = xy + xy + y0;
             }
 
-            SetPixel(picture->pixel_array, ix, iy, number_of_iterations);
+            pixel_array[iy * SCREEN_WIDTH + ix] = number_of_iterations; 
         }
     }
 }
@@ -134,7 +133,8 @@ _mm256_cmp_ps();
 <h1 align="center"> Приложение </h1>
 
 <h4>Полный список флагов</h4>
-```
+
+``` 
 -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal\
 -Winline -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs \
 -Wswitch-enum -Wswitch-default -Weffc++ -Wmain -Wextra -Wall -g -pipe -fexceptions\
@@ -186,6 +186,7 @@ _mm256_cmp_ps();
 | AVX    |  440524551.36 |   63067849.6  |   62766071.68 |   62159874.24 |
 
 <h4>Финальная таблица</h4>
+
 В таблице записаны $10^6$ такты 
 
 | FINAL  |        -O0        |         -O1       |         -O2       |         -O3       |
@@ -193,4 +194,6 @@ _mm256_cmp_ps();
 | SIMPLE |$1232.13 \pm 32.28$| $444.46 \pm 2.04$ | $407.99 \pm 1.19$ | $411.20 \pm 6.06$ |
 | VECTOR |$3152.78 \pm 66.24$| $652.77 \pm 10.10$| $622.43 \pm 22.19$| $219.88 \pm 5.64$ |
 | AVX    | $444.74 \pm 9.20$ | $ 62.75 \pm 1$    | $ 62.84 \pm 1.23$ | $61.27  \pm 0.79$ |
+
+
 

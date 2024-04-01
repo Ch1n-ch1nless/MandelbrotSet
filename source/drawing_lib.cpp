@@ -131,12 +131,17 @@ void SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity
     }
     else
     {
-        unsigned char coef = (unsigned char)(pow(((float)iter_quantity / (float)MAX_NUMBER_OF_ITERATIONS), 0.35f) * 255.f);
+        unsigned char n = (unsigned char)(pow(((float)iter_quantity / (float)MAX_NUMBER_OF_ITERATIONS), 0.35f) * 255.f);
 
-        *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 0) = 255 - coef;
-        *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 1) = 64 * (coef % 2);
-        *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 2) = coef;
-        *(((unsigned char *) pixel_array) + (y_pos * SCREEN_WIDTH + x_pos) * sizeof(unsigned) + 3) = 0xFF;
+        n = 255 - n;
+
+        unsigned int res = 0xFFu << 24u;    //< A channel
+
+        res += n << 16u;                    //< B channel
+        res += ((n % 8u) * 32u) << 8u;      //< G channel
+        res += (n % 2u) * 255u;             //< R channel
+
+        pixel_array[y_pos * SCREEN_WIDTH + x_pos] = res;
     }
 }
 
