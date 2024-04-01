@@ -36,7 +36,7 @@ void        FPSDtor(FPS* program_fps);
 
 void        WriteFPS(FPS* program_fps, sf::RenderWindow &window);
 
-void        DrawWindow (Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* pixel_array, int x_shift, int y_shift, int zoom));
+void        DrawWindow (Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coords* coords_begin));
 
 int         UpdateUserSettings(Picture* picture);
 

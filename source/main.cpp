@@ -1,7 +1,7 @@
 #include "drawing_lib.h"
 #include "args_parser.h"
 
-void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, int x_shift, int y_shift, int zoom));
+void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coords* coords_begin));
 
 int main(int argc, const char* argv[])
 {
@@ -87,15 +87,17 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
-void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, int x_shift, int y_shift, int zoom))
+void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coords* coords_begin))
 {
     unsigned int* pixel_array = (unsigned int*) calloc(SCREEN_HEIGHT * SCREEN_WIDTH, sizeof(unsigned int));
     assert((pixel_array != nullptr) && "Program can not allocate memory!\n");
 
+    Coords coords_begin = {};
+
     for (int i = 0; i < 100; i++)
     {
         unsigned long long time_begin   = __rdtsc();
-        CalculateMandelbrotSet(pixel_array, X_SHIFT, Y_SHIFT, ZOOM_DEFAULT);
+        CalculateMandelbrotSet(pixel_array, &coords_begin);
         unsigned long long time_end     = __rdtsc();
         printf("%lld\n", time_end - time_begin);
     }

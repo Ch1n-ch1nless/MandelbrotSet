@@ -38,7 +38,7 @@ void PictureDtor(Picture* picture)
     return;
 }
 
-void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* pixel_array, int x_shift, int y_shift, int zoom))
+void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coords* coords))
 {
     assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
     assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
@@ -53,44 +53,77 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* p
         
         while (window.pollEvent(event))
         {
-            sf::Keyboard keyboard;
+            switch(event.type)
+            {
+                case sf::Event::Closed:
+                {
+                    window.close();
+                    break;
+                }
 
-            if (keyboard.isKeyPressed(sf::Keyboard::Add))
-            {
-                picture->coords.zoom /= ZOOM_CONSTANT;
-            }
-            if (keyboard.isKeyPressed(sf::Keyboard::Subtract))
-            {
-                picture->coords.zoom *= ZOOM_CONSTANT;
-            }
-            if (keyboard.isKeyPressed(sf::Keyboard::Up))
-            {
-                picture->coords.y_shift -= SHIFT_CONSTANT * picture->coords.zoom;
-            }
-            if (keyboard.isKeyPressed(sf::Keyboard::Down))
-            {
-                picture->coords.y_shift += SHIFT_CONSTANT * picture->coords.zoom;
-            }
-            if (keyboard.isKeyPressed(sf::Keyboard::Left))
-            {
-                picture->coords.x_shift -= SHIFT_CONSTANT * picture->coords.zoom;
-            }
-            if (keyboard.isKeyPressed(sf::Keyboard::Right))
-            {
-                picture->coords.x_shift += SHIFT_CONSTANT * picture->coords.zoom;
-            }
-            if (keyboard.isKeyPressed(sf::Keyboard::Escape))
-            {
-                window.close();
-            }
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-                break;
+                case sf::Event::KeyPressed:
+                {
+                    switch(event.key.code)
+                    {
+                        case sf::Keyboard::Equal:
+                        case sf::Keyboard::Add:
+                        {
+                            picture->coords.zoom /= ZOOM_CONSTANT;
+                            break;
+                        }
+
+                        case sf::Keyboard::Hyphen:
+                        case sf::Keyboard::Subtract:
+                        {
+                            picture->coords.zoom *= ZOOM_CONSTANT;
+                            break;
+                        }
+
+                        case sf::Keyboard::Up:
+                        {
+                            picture->coords.y_shift -= SHIFT_CONSTANT * picture->coords.zoom;
+                            break;
+                        }
+
+                        case sf::Keyboard::Down:
+                        {
+                            picture->coords.y_shift += SHIFT_CONSTANT * picture->coords.zoom;
+                            break;
+                        }
+
+                        case sf::Keyboard::Left:
+                        {
+                            picture->coords.x_shift -= SHIFT_CONSTANT * picture->coords.zoom;
+                            break;
+                        }
+
+                        case sf::Keyboard::Right:
+                        {
+                            picture->coords.x_shift += SHIFT_CONSTANT * picture->coords.zoom;
+                            break;
+                        }
+
+                        case sf::Keyboard::Escape:
+                        {
+                            window.close();
+                            break;
+                        }
+
+                        default:
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                default:
+                {
+                    break;
+                }
             }
         }
 
-        CalculateMandelbrotSet(picture->pixel_array, picture->coords.x_shift, picture->coords.y_shift, picture->coords.zoom);
+        CalculateMandelbrotSet(picture->pixel_array, &(picture->coords));
         SetPixelArray(picture->pixel_array);
 
         picture->texture.update((const uint8_t *) (picture->pixel_array));
