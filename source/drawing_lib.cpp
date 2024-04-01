@@ -38,7 +38,7 @@ void PictureDtor(Picture* picture)
     return;
 }
 
-void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coords* coords_begin))
+void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* pixel_array, int x_shift, int y_shift, int zoom))
 {
     assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
     assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
@@ -90,7 +90,7 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* p
             }
         }
 
-        CalculateMandelbrotSet(picture->pixel_array, &(picture->coords));
+        CalculateMandelbrotSet(picture->pixel_array, picture->coords.x_shift, picture->coords.y_shift, picture->coords.zoom);
         SetPixelArray(picture->pixel_array);
 
         picture->texture.update((const uint8_t *) (picture->pixel_array));

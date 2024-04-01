@@ -9,7 +9,7 @@
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "/home/oleg/Documents/MyAsmTasks/MandelbrotSet",
-      "program": "/home/oleg/Documents/MyAsmTasks/MandelbrotSet/aboba",
+      "program": "/home/oleg/Documents/MyAsmTasks/MandelbrotSet/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
