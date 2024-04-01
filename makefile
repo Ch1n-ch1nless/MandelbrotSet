@@ -15,22 +15,13 @@ OBJ_DIR = ./object/
 SRC = $(wildcard $(SRC_DIR)*.cpp)
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
 
-all: 
+all: link
 
-intrinsic:
-	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/intrinsic_realization.cpp -o ./object/intrinsic_realization.o
-	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/intrinsic_realization.o -o mandelbrot_intrinsic -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+link: $(OBJ)
+	$(CC) $(OBJ) -o mandelbrot_set -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
-vector:
-	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/vector_realization.cpp -o ./object/vector_realization.o
-	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/vector_realization.o -o mandelbrot_vector -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-
-simple:
-	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/simple_realization.cpp -o ./object/simple_realization.o
-	$(CC) $(CFLAGS) $(OPT_LEVEL) -c ./source/drawing_lib.cpp -o ./object/drawing_lib.o
-	$(CC) ./object/drawing_lib.o ./object/simple_realization.o -o mandelbrot_simple -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
+	@$(CC) $(CFLAGS) $(OPT_LEVEL) -c $< -o $@
 
 clean:
 	rm $(OBJ)

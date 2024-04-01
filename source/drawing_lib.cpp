@@ -4,9 +4,9 @@ Picture* PictureCtor(float x_shift, float y_shift, float zoom)
 {
     Picture* picture = new Picture;
 
-    picture->x_shift = x_shift;
-    picture->y_shift = y_shift;
-    picture->zoom    = zoom;
+    picture->coords.x_shift = x_shift;
+    picture->coords.y_shift = y_shift;
+    picture->coords.zoom    = zoom;
 
     if (!picture->texture.create(SCREEN_WIDTH, SCREEN_HEIGHT))
     {
@@ -26,9 +26,9 @@ void PictureDtor(Picture* picture)
     assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
     assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
 
-    picture->x_shift = 0.0f;
-    picture->y_shift = 0.0f;
-    picture->zoom    = 0.0f;
+    picture->coords.x_shift = 0.0f;
+    picture->coords.y_shift = 0.0f;
+    picture->coords.zoom    = 0.0f;
 
     free(picture->pixel_array);
     picture->pixel_array = nullptr;
@@ -38,7 +38,7 @@ void PictureDtor(Picture* picture)
     return;
 }
 
-void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* picture))
+void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coords* coords_begin))
 {
     assert((picture              != nullptr) && "Pointer to \'picture\' is NULL!!!\n");
     assert((picture->pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
@@ -57,27 +57,27 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
 
             if (keyboard.isKeyPressed(sf::Keyboard::Add))
             {
-                picture->zoom /= ZOOM_CONSTANT;
+                picture->coords.zoom /= ZOOM_CONSTANT;
             }
             if (keyboard.isKeyPressed(sf::Keyboard::Subtract))
             {
-                picture->zoom *= ZOOM_CONSTANT;
+                picture->coords.zoom *= ZOOM_CONSTANT;
             }
             if (keyboard.isKeyPressed(sf::Keyboard::Up))
             {
-                picture->y_shift -= SHIFT_CONSTANT * picture->zoom;
+                picture->coords.y_shift -= SHIFT_CONSTANT * picture->coords.zoom;
             }
             if (keyboard.isKeyPressed(sf::Keyboard::Down))
             {
-                picture->y_shift += SHIFT_CONSTANT * picture->zoom;
+                picture->coords.y_shift += SHIFT_CONSTANT * picture->coords.zoom;
             }
             if (keyboard.isKeyPressed(sf::Keyboard::Left))
             {
-                picture->x_shift -= SHIFT_CONSTANT * picture->zoom;
+                picture->coords.x_shift -= SHIFT_CONSTANT * picture->coords.zoom;
             }
             if (keyboard.isKeyPressed(sf::Keyboard::Right))
             {
-                picture->x_shift += SHIFT_CONSTANT * picture->zoom;
+                picture->coords.x_shift += SHIFT_CONSTANT * picture->coords.zoom;
             }
             if (keyboard.isKeyPressed(sf::Keyboard::Escape))
             {
@@ -90,15 +90,8 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
             }
         }
 
-#ifdef SHOW_TIME
-        unsigned long long time_start = __rdtsc();
-        CalculateMandelbrotSet(picture);
-        unsigned long long time_end   = __rdtsc();
-        printf("%lld\n", time_end - time_start);
-#else
-        CalculateMandelbrotSet(picture);
-#endif
-
+        CalculateMandelbrotSet(picture->pixel_array, &(picture->coords));
+        SetPixelArray(picture->pixel_array);
 
         picture->texture.update((const uint8_t *) (picture->pixel_array));
 
@@ -115,13 +108,26 @@ void DrawWindow(Picture* picture, void (*CalculateMandelbrotSet)(Picture* pictur
 
 }
 
+void SetPixelArray(unsigned int* pixel_array)
+{
+    assert((pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
+
+    for (int y_pos = 0; y_pos < SCREEN_HEIGHT; y_pos++)
+    {
+        for (int x_pos = 0; x_pos < SCREEN_WIDTH; x_pos++)
+        {
+            SetPixel(pixel_array, x_pos, y_pos, pixel_array[y_pos * SCREEN_WIDTH + x_pos]);
+        }
+    }
+}
+
 void SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity)
 {
     assert((pixel_array != nullptr) && "Pointer to \'pixel_array\' is NULL!!!\n");
 
     if (iter_quantity == MAX_NUMBER_OF_ITERATIONS)
     {
-        *(pixel_array + (y_pos * SCREEN_WIDTH + x_pos)) = BLACK;
+        *(pixel_array + (y_pos * SCREEN_WIDTH + x_pos)) = BLACK_COLOR;
     }
     else
     {
