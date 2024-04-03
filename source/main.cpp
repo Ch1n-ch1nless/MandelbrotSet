@@ -26,7 +26,7 @@ int main(int argc, const char* argv[])
                 break;
             
             case IMP_AVX:
-                DrawWindow(picture, IntrinsicCalculateMandelbrotSet);
+                DrawWindow(picture, AVXCalculateMandelbrotSet);
                 break;
 
             case IMP_VECTOR_NO_AVX:
@@ -56,7 +56,7 @@ int main(int argc, const char* argv[])
             
             case IMP_AVX:
             {
-                TestFunction(IntrinsicCalculateMandelbrotSet);
+                TestFunction(AVXCalculateMandelbrotSet);
                 break;
             }
 
@@ -89,6 +89,8 @@ int main(int argc, const char* argv[])
 
 void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coords* coords_begin))
 {
+    assert((CalculateMandelbrotSet != nullptr) && "Pointer on function is NULL!!!\n");
+
     unsigned int* pixel_array = (unsigned int*) calloc(SCREEN_HEIGHT * SCREEN_WIDTH, sizeof(unsigned int));
     assert((pixel_array != nullptr) && "Program can not allocate memory!\n");
 

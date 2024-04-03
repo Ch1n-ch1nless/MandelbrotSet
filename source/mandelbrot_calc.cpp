@@ -1,5 +1,5 @@
 #include "config.h"
-//Указатель преобразования цвета!!!
+
 void PerPixelCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin)
 {
     assert((coords_begin != nullptr) && "Pointer to \'coords_begin\' is NULL!!!\n");
@@ -88,7 +88,7 @@ void VectorCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begi
     }
 }
 
-void IntrinsicCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin)
+void AVXCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin)
 {
     assert((coords_begin != nullptr) && "Pointer to \'coords_begin\' is NULL!!!\n");
     assert((pixel_array  != nullptr) && "Pointer to \'pixel_array\'  is NULL!!!\n");

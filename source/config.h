@@ -35,9 +35,9 @@ struct Coords
 
 /*============FUNCTION_DECLARATION============*/
 
-void PerPixelCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin);
-void VectorCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin);
-void IntrinsicCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin);
+void    PerPixelCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin);
+void    VectorCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin);
+void    AVXCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begin);
 
 /*============================================*/
 
