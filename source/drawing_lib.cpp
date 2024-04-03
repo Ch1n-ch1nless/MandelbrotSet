@@ -168,11 +168,11 @@ void SetPixel(unsigned int* pixel_array, int x_pos, int y_pos, int iter_quantity
 
         n = 255 - n;
 
-        unsigned int res = 0xFFu << 24u;    //< A channel
+        unsigned int res = 0xFFu << 24u;                    //< A channel
 
-        res += n << 16u;                    //< B channel
-        res += ((n % 8u) * 32u) << 8u;      //< G channel
-        res += (n % 2u) * 255u;             //< R channel
+        res += ((unsigned int) (sin(2*n) * 255u)) << 16u;   //< B channel
+        res += ((unsigned int) (cos(n) * 255u)) << 8u;      //< G channel
+        res +=  (unsigned int) (sin(n) * 255u);             //< R channel
 
         pixel_array[y_pos * SCREEN_WIDTH + x_pos] = res;
     }

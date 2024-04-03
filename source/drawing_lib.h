@@ -2,6 +2,7 @@
 #define DRAWING_LIBRARY
 
 #include "config.h"
+#include <math.h>
 #include <SFML/Graphics.hpp>
 
 /*==================CONSTANTS=================*/
