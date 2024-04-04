@@ -96,7 +96,7 @@ void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coor
 
     Coords coords_begin = {};
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 256; i++)
     {
         unsigned long long time_begin   = __rdtsc();
         CalculateMandelbrotSet(pixel_array, &coords_begin);
