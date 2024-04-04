@@ -158,7 +158,7 @@ void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coor
 Простая реализация заключается в переводе на язык Си всего, что было написано в [теоретической справке](#теоретическая-справка).
 Сам алгоритм в теле цикла пересчета элементов последовательности обрабатывает 1 пиксель. 
 
-Примера кода на `C` можно увидеть по [ссылке]().  
+Примера кода на `C` можно увидеть по [ссылке](https://github.com/Ch1n-ch1nless/MandelbrotSet/blob/4e1cae34593f027b608469ad3a83d6037623ba7e/source/mandelbrot_calc.cpp#L3).  
 
 ### Векторная реализация
 
@@ -166,7 +166,7 @@ void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coor
 Данная реализация отличается от простой реализации тем, что алгоритм в теле цикла одновременно обрабатывает 8 пикселей. 
 Тем самым пытаемся показать компилятору возможность к ускорения за счет параллельного вычисления. 
 
-Примера кода на `C` можно увидеть по [ссылке](). 
+Примера кода на `C` можно увидеть по [ссылке](https://github.com/Ch1n-ch1nless/MandelbrotSet/blob/4e1cae34593f027b608469ad3a83d6037623ba7e/source/mandelbrot_calc.cpp#L38). 
 
 ### Avx реализация
 
@@ -174,7 +174,7 @@ void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coor
 В данной реализации используются машинно зависимых векторных инструкций процессора. \
 В моей реализации были использованы команды с [зеркала intel intrinsic guide](https://www.laruence.com/sse/#techs=AVX,AVX2). 
 
-Примера кода на `C` можно увидеть по [ссылке]().  
+Примера кода на `C` можно увидеть по [ссылке](https://github.com/Ch1n-ch1nless/MandelbrotSet/blob/4e1cae34593f027b608469ad3a83d6037623ba7e/source/mandelbrot_calc.cpp#L91).  
 
 # Измерение времени
 
