@@ -18,7 +18,7 @@ OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
 all: link
 
 link: $(OBJ)
-	@$(CC) $(OBJ) -o mandelbrot_set -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+	@$(CC) $(OBJ) -o mandelbrot_set.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
 	@$(CC) $(CFLAGS) $(OPT_LEVEL) -c $< -o $@

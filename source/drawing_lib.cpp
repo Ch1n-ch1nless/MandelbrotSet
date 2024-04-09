@@ -210,8 +210,9 @@ void WriteFPS(FPS* program_fps, sf::RenderWindow &window)
 
     float delta_time = program_fps->clock.restart().asSeconds();
     float fps = 1 / delta_time;
+    fps = ceilf(fps);
 
-    std::string fps_string = "FPS: " + std::to_string(fps);
+    std::string fps_string = "FPS: " + std::to_string((int)fps);
     program_fps->text.setString(fps_string);
 
     #ifdef SHOW_FPS

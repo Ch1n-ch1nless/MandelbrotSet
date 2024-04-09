@@ -55,9 +55,9 @@ void VectorCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begi
             float cur_x_array[8] = {}; for (int i = 0; i < 8; i++) cur_x_array[i] = x0_array[i];
             float cur_y_array[8] = {}; for (int i = 0; i < 8; i++) cur_y_array[i] = y0_array[i];
 
-            int iter_array[8]    = {0, 0, 0, 0, 0, 0, 0, 0};
+            int iter_array[8]    = {};
 
-            for (int i = 0; i < MAX_NUMBER_OF_ITERATIONS; i++)
+            for (int iter = 0; iter < MAX_NUMBER_OF_ITERATIONS; iter++)
             {
                 float x2_array[8] = {}; for (int i = 0; i < 8; i++) x2_array[i] = cur_x_array[i] * cur_x_array[i];
                 float y2_array[8] = {}; for (int i = 0; i < 8; i++) y2_array[i] = cur_y_array[i] * cur_y_array[i];
@@ -65,7 +65,7 @@ void VectorCalculateMandelbrotSet(unsigned int* pixel_array, Coords* coords_begi
                 
                 float r2_array[8] = {}; for (int i = 0; i < 8; i++) r2_array[i] = x2_array[i] + y2_array[i];
 
-                int is_point[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
+                int is_point[8]   = {};
 
                 for (int i = 0; i < 8; i++) is_point[i] = (r2_array[i] < MAX_SQUARE_RADIUS);
 
