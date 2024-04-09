@@ -47,7 +47,6 @@ $$x_{n+1} = x_n^2 - y_n^2 + y_0$$
 
 Вычисления будут проводиться, пока $n < 256$ и $x_n^2 + y_n^2 \leq 100$. Точки, которые не вышли за пределы окружности радиусом $100$, образуют [множество Мандельброта](https://mathworld.wolfram.com/MandelbrotSet.html). На картинке они покрашены в черный цвет. Остальные точки не входят в [множество Мандельброта](https://mathworld.wolfram.com/MandelbrotSet.html), они покрашены в другие цвета. 
 
-
 Для точек не из [множества Мандельброта](https://mathworld.wolfram.com/MandelbrotSet.html) цвет зависит от $n$. Библиотека [SFML](https://www.sfml-dev.org/) задаёт цвет пикселя в формате `rgba`. Далее цвет рассчитывается по 
 
 |        R        |        G       |         B        |   A   |
@@ -175,7 +174,6 @@ void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coor
 
 Код на `C` можно увидеть в source/mandelbrot_calc.cpp/[PerPixelCalculateMandelbrotSet()](https://github.com/Ch1n-ch1nless/MandelbrotSet/blob/4e1cae34593f027b608469ad3a83d6037623ba7e/source/mandelbrot_calc.cpp#L3).  
 
-
 ### Векторная реализация (VECTOR)
 
 Данная реализация отличается от простой реализации тем, что алгоритм в теле цикла одновременно обрабатывает 8 пикселей. 
@@ -209,7 +207,6 @@ void TestFunction(void (*CalculateMandelbrotSet)(unsigned int* pixel_array, Coor
 ## Результаты
 
 Все таблицы с результатами можно увидеть по [ссылке](#таблица-1). 
-
 Тут будет показана диаграмма, которая построена по данным таблицы ниже.
 
 ![Диаграмма увеличения производительности относительно простой реализации с уровнем оптимизации = -O0](/images/diagram.png)
