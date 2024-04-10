@@ -256,8 +256,10 @@ for (int i = 0; i < MAX_NUMBER_OF_ITERATIONS; i++)
 Для каждого запуска теста было получено среднее время работы алгоритма расчета в тактах. Обозначим его в дальнейшем, как $\overline{time}_i$, где $i$ - номер запуска.
 После 5 запусков тестов для конкретной оптимизации считается среднее квадратичное отклонение времени $(\sigma)$. 
 Далее была рассчитана относительная погрешность по следующим формулам: 
+
 $$\varepsilon = \frac{\sigma}{\langle time \rangle} \cdot 100\%$$ 
-$$ \langle time \rangle = \frac{\overline{time}_1 + \overline{time}_2 + \overline{time}_3 + \overline{time}_4 + \overline{time}_5}{5} $$
+
+$$\langle time \rangle = \frac{\overline{time}_1 + \overline{time}_2 + \overline{time}_3 + \overline{time}_4 + \overline{time}_5}{5} $$
 
 Значение $\varepsilon$ записано в [таблицу относительных погрешностей](#таблица-относительных-погрешностей). \
 Значение $\overline{time}_n$ записано в [таблицу под номером n](#таблица-1). \
